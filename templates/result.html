@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #333;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tab-buttons {
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons button {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tab-buttons button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .tab.active {
+            display: block;
+        }
+
+        .speaker-block {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            background-color: #fafafa;
+        }
+
+        .speaker-block img {
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 30px;
+        }
+
+        strong {
+            font-size: 16px;
+            color: #222;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #666;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        a.home-button {
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        a.home-button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        window.onload = function () {
+            showTab('script');
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: right; margin-bottom: 20px;">
+            <a href="/" class="home-button">← Back to Home</a>
+        </div>
+        <h1>{{ message }}</h1>
+
+        {% if not custom %}
+        <div class="tab-buttons">
+            <button onclick="showTab('script')">Script</button>
+            <button onclick="showTab('faces')">Detected Faces</button>
+        </div>
+
+        <div id="script" class="tab">
+            <h2>Script by Speaker</h2>
+            {% for entry in merged_script %}
+                <div class="speaker-block">
+                    <strong>Speaker {{ entry.speaker }}</strong><br>
+                    <div>{{ entry.word }}</div>
+                    <div class="small">({{ entry.start }}s - {{ entry.end }}s)</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="faces" class="tab">
+            <h2>Detected Face Crops by Speaker</h2>
+            {% for speaker, images in extracted_imgs.items() %}
+                <div class="speaker-block">
+                    <strong>Speaker {{ speaker }}</strong><br>
+                    {% for img_b64 in images %}
+                        <img src="data:image/jpeg;base64,{{ img_b64 }}" width="160">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

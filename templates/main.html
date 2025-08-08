@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select a Video</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #333;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-left: 8px;
+            font-size: 16px;
+        }
+
+        input[type="radio"] {
+            transform: scale(1.2);
+            margin-right: 4px;
+        }
+
+        input[type="file"] {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #357ab8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select a Video to Analyze</h1>
+
+        <form action="/submit/" method="post" enctype="multipart/form-data">
+            {% for video in videos %}
+                <div class="option-group">
+                    <input type="radio" id="{{ video.id }}" name="selected_video" value="{{ video.id }}" required>
+                    <label for="{{ video.id }}">{{ video.name }}</label>
+                </div>
+            {% endfor %}
+
+            <div class="option-group">
+                <input type="radio" id="custom" name="selected_video" value="custom">
+                <label for="custom">Upload your own video</label><br>
+                <input type="file" name="custom_video" accept="video/*">
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
